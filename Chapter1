@@ -1,5 +1,109 @@
 Sun Oct 22 12:59:33 EDT 2017
 START
 
-Chapter 1
+Chapter 1 - Learning from urlget
 
+$ git clone git@github.com:baloi/learning_from.git
+
+Open ~/tinker/curl_evolution/1_url_get_3.12/url_get.c
+
+$ vim learn_urlget.c
+$ ls
+Chapter1
+learn_urlget.c
+README.md
+
+
+First find a network read-write function:
+
+In static int sendf() function, swrite() is call.
+
+$ mkdir urlget
+$ cp ~/tinker/curl_evolution/1_url_get3.12/*.c urlget
+$ cp ~/tinker/curl_evolution/1_url_get3.12/*.h urlget
+$ grep -n "swrite" urlget/*
+
+urlget/config.h:76:#define swrite(x,y,z) (size_t)send(x,y,z,0)
+urlget/config.h:80:#define swrite(x,y,z) write(x,y,z)
+urlget/urlget.c:534:      if(nread != swrite(sockfd, buf, nread)) {
+urlget/urlget.c:1323:  return(swrite(fd, s, strlen(s)));
+
+> As we can see, urlget/config.h:80
+  "#define swrite(x,y,z) (size_t)send(x,y,z,0)"
+  This is what we are looking for.
+  swrite(x,y,z) is just a call to send(x,y,z,0)
+
+  swrite() is used in:
+  static int sendf(int fd, struct UrlData *data, char *fmt, ...)
+
+  I am going to use a simpler sendf()...
+
+  And also implement struct UrlData: 
+
+--- code start ---
+/*   Example: learn_urlget -p 8080 -x my-proxy.my.site http://www.from.here 
+ */
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <string.h>
+
+
+#define LEAST_SIZE_PROGRESS BUFSIZE
+#define BUFSIZE (2048 * 5)
+
+/* config struct */
+struct UrlData {
+    FILE *out;  // the fetched file goes here
+    FILE *in;   // the uploaded file is read from here
+    char *url;  // what to get
+    unsigned short port;  // which port to use
+
+    // function that stores the output
+    size_t (*fwrite) (char *buffer,
+                      int size,
+                      int nitems,
+                      FILE *outstream);
+    // function that reads the input
+    size_t (*fread)(char *buffer,
+                    int size,
+                    int nitems,
+                    FILE *outstream);
+    long timeout;  // in seconds, 0 means no timeout
+    // fields only set and used without _urlget()
+    int firstsocket;    // the main socket to use
+    int secondarysocket;// for i.e ftp transfers
+    char buffer[BUFSIZE+1];
+};
+
+#include <stdio.h>
+
+/* sendf() sends the str to the server */
+static int sendf(int fd, struct UrlData *data, char *str) {
+    char s[1024];
+
+    return (send(fd, s, strlen(s), 0));
+}
+
+int main(int argc, char **argv) {
+    char *str = "hello there";
+    int ret = sendf(fd, data, str);      
+    return 0;
+}
+--- code end ---
+
+> That was a lot of setting up...
+
+$ cc learn_urlget.c
+
+learn_urlget.c: In function 'main':
+learn_urlget.c:47:21: error: 'fd' undeclared (first use in this function)
+     int ret = sendf(fd, data, str);
+                     ^~
+learn_urlget.c:47:21: note: each undeclared identifier is reported only once for each function it appears in
+learn_urlget.c:47:25: error: 'data' undeclared (first use in this function)
+     int ret = sendf(fd, data, str);
+                         ^~~~
+
+Sun Oct 22 13:42:00 EDT 2017
+END
