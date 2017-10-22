@@ -1,6 +1,7 @@
 /*   Example: learn_urlget -p 8080 -x my-proxy.my.site http://www.from.here 
  */
 #include <stdio.h>
+#include <stdlib.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <string.h>
@@ -44,6 +45,20 @@ static int sendf(int fd, struct UrlData *data, char *str) {
 
 int main(int argc, char **argv) {
     char *str = "hello there";
+    struct UrlData *data;
+    data = malloc(sizeof(struct UrlData));
+
+    if (data) {
+        memset(data, 0, sizeof(struct UrlData));
+        // set some defaults...
+        data->out = stdout;
+        data->in = stdin;
+        data->firstsocket = -1; // no file descriptor
+        // use fwrite as default function to store output
+        data->fwrite = (size_t (*)(char *, int, int, FILE *))fwrite;
+        
+    }
+
     int ret = sendf(fd, data, str);      
     return 0;
 }

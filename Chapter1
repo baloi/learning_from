@@ -107,3 +107,64 @@ learn_urlget.c:47:25: error: 'data' undeclared (first use in this function)
 
 Sun Oct 22 13:42:00 EDT 2017
 END
+
+Sun Oct 22 13:50:22 EDT 2017
+START
+
+> Now, where is UrlData used...
+  Doing "/UrlData" in vim eventually shows in urlget() as:
+  
+  struct UrlData * data;
+  So let's use that in main:
+
+--- code start ---
+int main(int argc, char **argv) {
+    char *str = "hello there";
+    struct UrlData *data;
+    data = malloc(sizeof(struct UrlData));
+    int ret = sendf(fd, data, str);
+    return 0;
+}
+--- code end ---
+
+$ cc learn_urlget.c
+
+learn_urlget.c: In function 'main':
+learn_urlget.c:48:12: warning: implicit declaration of function 'malloc' [-Wimplicit-function-declaration]
+     data = malloc(sizeof(struct UrlData));
+            ^~~~~~
+learn_urlget.c:48:12: warning: incompatible implicit declaration of built-in function 'malloc'
+learn_urlget.c:48:12: note: include '<stdlib.h>' or provide a declaration of 'malloc'
+learn_urlget.c:49:21: error: 'fd' undeclared (first use in this function)
+     int ret = sendf(fd, data, str);
+                     ^~
+learn_urlget.c:49:21: note: each undeclared identifier is reported only once for each function it appears in
+
+> Need stdlib.h for malloc() and then got to work on "fd"...
+  So add this line on top of code:
+
+#include <stdlib.h>
+
+> and then let's deal with "data" (struct UrlData *):
+
+   data = malloc(sizeof(struct UrlData));
+   if (data) {
+        data->out = stdout;
+        data->in = stdin;
+        data->firstsocket = -1; // no file descriptor
+        // use fwrite as default function to store output
+        data->fwrite = (size_t (*)(char *, int, int, FILE *))fwrite;
+   }
+
+> Notice that man fwrite gets:
+  size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream);
+
+  And in this piece of code, we are casting fwrite to
+  (size_t (*)(char *, int, int, FILE *))
+
+  data->fwrite = (size_t (*)(char *, int, int, FILE *))fwrite;
+
+> Taking a break. Now at urlget() function in urlget.c
+
+Sun Oct 22 14:10:32 EDT 2017
+END
