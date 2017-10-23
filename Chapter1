@@ -348,5 +348,8 @@ int main(int argc, char **argv) {
 
 --- code end ---
 
+> Next: work on main and passing something to sendf()
+  in sendf(): must copy contents of *str to char s[1024] 
+
 Sun Oct 22 21:30:46 EDT 2017
 END
