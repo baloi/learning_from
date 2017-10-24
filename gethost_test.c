@@ -43,6 +43,7 @@ int main(int argc, char **argv) {
     he = getHost(hostname);
 
     printf("getHost he->h_name returned >>%s<<\n", he->h_name);
+
     return 0;
 }
 

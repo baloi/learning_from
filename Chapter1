@@ -413,3 +413,92 @@ int main(int argc, char **argv) {
 
 Mon Oct 23 08:39:11 EDT 2017
 END
+
+Mon Oct 23 16:36:46 EDT 2017
+START
+
+> Now, the above code did not have anything for he->h_addr or
+  hp->h_addrtype and:
+
+$ man gethostbyname
+
+> The above man page says that gethostbyname() and gethostbyaddr()
+  are both obsolete. Applications should use getaddrinfo(),
+  getnameinfo() and gai_strerror() instead. So I looked around
+  and searched the PDF copy of "Beej's Guide to Networking" for
+  a quick code sample - btw, TCP/IP Illustrated looks more
+  authoritative, but I needed a quick search...
+  CTRL-s "getaddrinfo"
+
+Mon Oct 23 16:55:46 EDT 2017
+END
+
+Tue Oct 24 08:05:24 EDT 2017
+START
+
+> THINGS I HAVE LEARNED SO FAR:
+
+> using enum to create constants and make return types as the
+  enum type, example:
+
+typedef enum {
+    URG_OK = 0,
+    URG_COULDNT_CONNECT,
+    URG_COULDNT_RESOLVE_HOST
+} UrgError;
+
+static UrgError _urlget(struct UrlData *data);
+
+> _urlget() returns actually an int but the function itself
+  returns only the constants in enum UrgError, hence the return
+  type can be of UrgError which gives us a better idea what kind
+  of value the function is supposed to return and it also does
+  not need to "throw" an exception. Convenient!
+
+> Structs with function pointers in them:
+
+struct UrlData {
+    FILE *out;  // the fetched file goes here
+    FILE *in;   // the uploaded file is read from here
+    char *url;  // what to get
+    unsigned short port;  // which port to use
+
+    // function that stores the output
+    size_t (*fwrite) (char *buffer,
+                      int size,
+                      int nitems,
+                      FILE *outstream);
+    char buffer[BUFSIZE+1];
+};
+
+> Consider fwrite in this structure.
+
+size_t (*fwrite) (char *buffer, int size, int nitems,
+        FILE *outstream);
+
+> It can be used this way:
+
+  struct UrlData *data;
+  data = malloc(sizeof(struct UrlData));
+  if (data) {
+    memset(data, 0, sizeof(struct UrlData));
+    data->out = stdout; /* default output to stdout */
+    data->in  = stdin;  /* default input from stdin */
+    data->firstsocket = -1; /* no file descriptor */
+    data->fwrite = (size_t (*)(char *, int, int, FILE *))fwrite;
+  }
+
+> Notice the last line before the brace, fwrite is casted to
+  (size_t (*)(char *, int, int, FILE *)), which corresponds to
+  the function signature of fwrite which is taken from man page,
+  compare now man page description and the cast...
+
+    size_t fwrite(void *ptr, size_t size, size_t nmemb,
+                  FILE *stream)
+    data->fwrite = (size_t (*)(char *, int, int, FILE *))fwrite;
+    vs.
+
+    data->fwrite = (size_t (*)(char *, int, int, FILE *))fwrite;
+
+Tue Oct 24 08:25:23 EDT 2017
+END
