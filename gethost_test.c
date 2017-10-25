@@ -15,14 +15,15 @@
 
 static struct hostent * getHost(char *hostname) {
     struct hostent *h = NULL;
+    struct in_addr ipv4addr;
     unsigned long in;
     printf("in getHost\n");
 
-    if ( (in = inet_addr(hostname)) != INADDR_NONE) {
+    //if ( (in = inet_addr(hostname)) != INADDR_NONE) {
+    if ( (inet_pton(AF_INET, hostname, &ipv4addr)) != INADDR_NONE) {
         printf("inet_addr(hostname) != INADDR_NONE\n");
-        if ( (h = gethostbyaddr((char *)&in, sizeof(in),
+        if ( (h = gethostbyaddr((char *)&ipv4addr, sizeof(ipv4addr),
                         AF_INET)) == NULL) {
-            //infof(data, "gethostbyaddr(2) failed for %s\n", hostname);
             fprintf(stderr, "gethostbyaddr(2) failed for %s\n", hostname);
         } else {
             printf("gethostbyaddr not NULL\n");
@@ -30,7 +31,6 @@ static struct hostent * getHost(char *hostname) {
         }
     } else if ( (h = gethostbyname(hostname)) == NULL) {
             printf("gethostbyname(hostname) == NULL)\n");
-            //infof(data, "gethostbyname(2) failed for %s\n", hostname);
             fprintf(stderr, "gethostbyname(2) failed for %s\n", hostname);
     }
     return (h);
@@ -39,8 +39,10 @@ static struct hostent * getHost(char *hostname) {
 
 int main(int argc, char **argv) {
     struct hostent *he; 
-    char *hostname = "127.0.0.1";
+    //char *hostname = "127.0.0.1";
+    char *hostname = "localhost";
     he = getHost(hostname);
+    printf("getHost he->h_addr returned >>%s<<\n", he->h_addr);
 
     printf("getHost he->h_name returned >>%s<<\n", he->h_name);
 
