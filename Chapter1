@@ -1,7 +1,7 @@
 Sun Oct 22 12:59:33 EDT 2017
 START
 
-Chapter 1 - Learning from urlget
+Chapter 1 - Learning from urlget with sideline of CppUTest
 
 $ git clone git@github.com:baloi/learning_from.git
 
@@ -501,4 +501,188 @@ size_t (*fwrite) (char *buffer, int size, int nitems,
     data->fwrite = (size_t (*)(char *, int, int, FILE *))fwrite;
 
 Tue Oct 24 08:25:23 EDT 2017
+END
+
+Wed Oct 25 19:26:06 EDT 2017
+START
+
+> Learning how to test in C with CppUTest. Got the idea from the sample content
+  from "Test Driven Development for Embedded C"
+  First the code (all of which are in c_me/testing
+
+--- code start ---
+
+/* file: first.c */
+
+#include "first.h"
+
+#ifndef CPPUTEST
+int main(int argc, char *argv[])
+{
+    char* pa;
+    char* pb;
+    pa = (char*) malloc(sizeof(char) * 80);
+    pb = (char*) malloc(sizeof(char) * 20);
+
+    strcpy(pa, "abcdefg\0");
+    strcpy(pb, "hijklmn\0");
+        
+    printf ("first Start......\n");
+    
+    ret_void();
+    printf ("ret_int: %d\n", ret_int(100, 10));
+    printf ("ret_double: %.2f\n", ret_double(100.0, 10.0));
+    printf ("ret_pchar: %s\n", ret_pchar(pa, pb));
+
+    struct Student* s = (struct Student*) malloc(sizeof(struct Student));
+    s->name = (char*) malloc(sizeof(char) * 80);
+    
+    init_student(s, "test cpputest", 100);
+    printf ("init_Student: name=%s, score=%d\n", s->name, s->score);
+    printf ("first End  ......\n");
+    free(pa);
+    free(pb);
+    free(s->name);
+    free(s);
+    
+    return 0;
+}
+#endif
+
+void ret_void()
+{
+    printf ("Hello CPPUTest!\n");
+}
+
+/* ia + ib */
+int ret_int(int ia, int ib)
+{
+    return ia + ib;
+}
+
+/* da / db */
+double ret_double(double da, double db)
+{
+    return da / db;
+}
+
+/* pa = pa + pb */
+char* ret_pchar(char* pa, char* pb)
+{
+    return strcat(pa, pb);
+}
+
+/* s->name = name, s->score = score */
+struct Student *init_student(struct Student* s, char* name, int score)
+{
+    strcpy(s->name, name);
+    s->score = score;
+    return s;
+}
+--- code end ---
+
+> then we have the header file "first.h" which is still a c file.
+
+--- code start ---
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+struct Student
+{
+    char* name;
+    int score;
+};
+
+void ret_void(void);
+int ret_int(int, int);
+double ret_double(double, double);
+char* ret_pchar(char*, char*);
+
+struct Student* init_student(struct Student* s, char* name, int score);
+
+--- code end ---
+
+> Then the makefile:
+
+--- code start ---
+# makefile for "first" cpputest (note that we should use tabs here
+CPPUTEST_HOME = /usr/local
+
+CC      := gcc
+CFLAGS    := -g -Wall
+CFLAGS  += -std=c99
+CFLAGS  += -D CPPUTEST            # Compile the test file, ignore the main function of first.c, the first.c code with the CPPUTEST macro
+
+# CPPUTest is C++Write, so using g++ To compile the test file
+CPP     := g++
+CPPFLAGS  := -g -Wall
+CPPFLAGS  += -I$(CPPUTEST_HOME)/include
+
+LDFLAGS := -L$(CPPUTEST_HOME)/lib -lCppUTest
+
+
+first: first.o
+
+first.o: first.h first.c
+	$(CC) -c -o first.o first.c $(CFLAGS)
+
+# Additional compiled test program
+test: test.o first.o
+	$(CPP) -o $@ test.o first.o $(LDFLAGS)
+
+test.o: first.h test.c
+	$(CPP) -c -o test.o test.c $(CPPFLAGS)
+
+
+.PHONY: clean
+clean:
+	@echo "clean..."
+	rm -f test first
+	rm -f first.o test.o
+--- code end ---
+
+> We almost forgot "test.c":
+
+--- code start ---
+/* file: test.c */
+
+#include <CppUTest/CommandLineTestRunner.h>
+#include <CppUTest/TestHarness.h>
+
+extern "C"
+{
+#include "first.h"
+}
+
+
+/* The definition of a TEST_GROUP, the name is first */
+TEST_GROUP(first)
+{};
+
+/* The definition of a belonging to the TEST_GROUP TEST, the name is ret_int_success */
+TEST(first, ret_int_success)
+{
+    int sum = ret_int(1, 2);
+    CHECK_EQUAL(sum, 3);
+}
+
+/* The definition of a belonging to the TEST_GROUP TEST, the name is ret_int_failed */
+TEST(first, ret_int_failed)
+{
+    int sum = ret_int(1, 2);
+    CHECK_EQUAL(sum, 4);
+}
+
+int main(int argc, char *argv[])
+{
+    CommandLineTestRunner::RunAllTests(argc, argv);
+    return 0;
+}
+--- code end ---
+
+> notice that we use extern "c" { #include "first.h" }
+
+Wed Oct 25 19:58:52 EDT 2017
 END
