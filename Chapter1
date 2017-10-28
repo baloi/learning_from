@@ -750,3 +750,42 @@ OK
 
 Sat Oct 28 00:07:00 EDT 2017
 END
+
+Sat Oct 28 12:16:55 EDT 2017
+START
+
+> made a compile script named "compile"
+
+$ vim compile
+#!/bin/sh
+cc LedDriverTest.c ../unity_fixture.c ../unity.c LedDriverTestRunner.c AllTests.c LedDriver.c -o test
+$ chmod u+x compile
+
+$ ./test
+
+> Note that in AllTests.c, main is:
+
+int main(int argc, const char * argv[]) 
+
+> Note "const char * argv[]"
+
+> Once you have AllTests.c and [project_name]TestRunner.c in
+  place, when you add a test you do this:
+  1. edit [project_name]Test.c:
+
+TEST(TestGroup, TestFuncName) {
+    ...
+    TEST_ASSERT_EQUAL(a, b);
+}
+    2. edit [project_name]TestRunner.c:
+TEST_GROUP_RUNNER(TestGroup) {
+    RUN_TEST_CASE(TestGroup, TestFunc1);
+    RUN_TEST_CASE(TestGroup, TestFuncName);
+}
+    3. Write stub for "FuncName" in [project_name].h    
+    4. Implement "FuncName" in [project_name].c
+
+    5. compile, test
+
+Sat Oct 28 12:58:43 EDT 2017
+END
