@@ -1,0 +1,3 @@
+#!/bin/sh
+cc LedDriver/LedDriverTest.c libs/unity_fixture.c libs/unity.c LedDriver/LedDriverTestRunner.c LedDriver/AllTests.c LedDriver/LedDriver.c -o test
+./test
