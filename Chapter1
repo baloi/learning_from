@@ -745,7 +745,7 @@ $ ./TestDumbExample
 TestDumbExample.c:12:test_AverageThreeBytes_should_AverageMidRangeValues:PASS
 
 -----------------------
-1 Tests 0 Failures 0 Ignored 
+1 Tests 0 Failures 0 Ignored
 OK
 
 Sat Oct 28 00:07:00 EDT 2017
@@ -765,7 +765,7 @@ $ ./test
 
 > Note that in AllTests.c, main is:
 
-int main(int argc, const char * argv[]) 
+int main(int argc, const char * argv[])
 
 > Note "const char * argv[]"
 
@@ -782,10 +782,39 @@ TEST_GROUP_RUNNER(TestGroup) {
     RUN_TEST_CASE(TestGroup, TestFunc1);
     RUN_TEST_CASE(TestGroup, TestFuncName);
 }
-    3. Write stub for "FuncName" in [project_name].h    
+    3. Write stub for "FuncName" in [project_name].h
     4. Implement "FuncName" in [project_name].c
 
     5. compile, test
 
 Sat Oct 28 12:58:43 EDT 2017
+END
+
+
+Sat Oct 28 18:40:09 EDT 2017
+START
+
+> Created a "barebones" project with tests in:
+~/learning_from/test_scaffold
+
+$ tree test_scaffold
+
+test_scaffold
+|-- LedDriver
+|   |-- AllTests.c
+|   |-- LedDriver.c
+|   |-- LedDriver.h
+|   |-- LedDriverTest.c
+|   `-- LedDriverTestRunner.c
+|-- libs
+|   |-- unity.c
+|   |-- unity_fixture.c
+|   |-- unity_fixture.h
+|   |-- unity_fixture_internals.h
+|   |-- unity_fixture_malloc_overrides.h
+|   |-- unity.h
+|   `-- unity_internals.h
+`-- run
+
+Sat Oct 28 18:49:48 EDT 2017
 END
