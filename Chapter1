@@ -686,3 +686,67 @@ int main(int argc, char *argv[])
 
 Wed Oct 25 19:58:52 EDT 2017
 END
+
+Fri Oct 27 23:38:25 EDT 2017
+START
+
+> Using Unity to test C code
+  Files in c_me/testing/unity:
+  This folder has unit.h unit.c and unity_internals.h
+
+  TestDumbExample.c:
+
+--- code start ---
+/*
+ * Compile with:
+ * $ cc TestDumbExample.c DumbExample.c unity.c -o TestDumbExample
+ */
+#include "unity.h"
+#include "DumbExample.h"
+
+void test_AverageThreeBytes_should_AverageMidRangeValues(void) {
+    TEST_ASSERT_EQUAL_HEX8(40, AverageThreeBytes(30, 40, 50));
+    TEST_ASSERT_EQUAL_HEX8(40, AverageThreeBytes(10, 70, 40));
+    TEST_ASSERT_EQUAL_HEX8(33, AverageThreeBytes(33, 33, 33));
+}
+
+int main() {
+    UNITY_BEGIN();
+    RUN_TEST(test_AverageThreeBytes_should_AverageMidRangeValues);
+    return UNITY_END();
+}
+--- code end ---
+
+> Code for DumbExample.c
+
+--- code start ---
+#include "DumbExample.h"
+
+int8_t AverageThreeBytes(int8_t a, int8_t b, int8_t c) {
+    return (int8_t)(((int16_t)a + (int16_t)b + (int16_t)c) / 3);
+}
+--- code end ---
+
+> Code for DumbExample.h:
+--- code start ---
+#include <stdint.h>
+
+int8_t AverageThreeBytes(int8_t a, int8_t b, int8_t c);
+--- code end ---
+
+> Compile with:
+
+$ cc TestDumbExample.c DumbExample.c unity.c -o TestDumbExample
+
+> Then run:
+
+$ ./TestDumbExample
+
+TestDumbExample.c:12:test_AverageThreeBytes_should_AverageMidRangeValues:PASS
+
+-----------------------
+1 Tests 0 Failures 0 Ignored 
+OK
+
+Sat Oct 28 00:07:00 EDT 2017
+END
