@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
-#include "../unity_fixture.h"
 #include "LedDriver.h"
 
 static uint16_t *ledsAddress; // static in this C file only
