@@ -1,0 +1,15 @@
+How to change names to your project's name.
+- change test_scaffold directory to ProjectName.
+- cd ProjectName
+- mv LedDriver ProjectName
+- mv LedDriver.c ProjectName.c
+- mv LedDriver.h ProjectName.h
+- mv LedDriverTest.c ProjectNameTest.c
+- mv LedDriverTestRunner.c ProjectNameTestRunner.c
+- change all instances of LedDriver in LedDriver.h to ProjectName
+- change all instances of LedDriver in AllTests.c to ProjectName
+- change all instances of LedDriver in LedDriver.c to ProjectName
+- change all instances of LedDriver in LedDriverTest.c to ProjectName
+- change all instances of LedDriver in LedDriverTestRunner.c to ProjectName
+- cd ..
+- change all instances of LedDriver in run to ProjectName 
