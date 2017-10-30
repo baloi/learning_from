@@ -843,3 +843,77 @@ How to change names to your project's name.
 
 Sun Oct 29 09:46:08 EDT 2017
 END
+
+Mon Oct 30 17:54:19 EDT 2017
+START
+> I think that I hacked on the code already for 30 minutes before starting
+  this post...
+> Working on making tests for a "list" implementation. Of course I am using
+  Salvatore Sanfilippo's (antirez), the creator of "redis", implementation
+  of a doubly linked list in adlist.c and adlist.h.
+  Since am reading "Test Driven Development for Embedded C", I am taking the
+  TDD approach which is just to make the test first to fail, then create
+  stubs to make it pass right away. Only making real implementation when
+  needed. If all tests pass with stubs then be it. Let the tests be correct
+  to have a safety net. If we need more implementation, write the tests
+  first.
+  The naming convention was a bit bothersome though in the TDD book. It is
+  like this:
+
+--- code start ---
+/* LedDriver.c */
+static uint16_t *ledsAddress;
+
+void LedDriver_Create(uint16_t *address) {
+    ledsAddress = address;
+    *ledsAddress = 0;
+}
+
+--- code end ---
+
+> Notice that ledsAddress is static in this C file making it accessible to
+  this file only, effectively making it "private". This implementation does
+  not even use structs for data members like ledsAddress.
+
+> Also the naming convention "void LedDriver_Create(uint16_t *address)"
+  uses capital letters for LedDriver (class name) then underscore and then
+  capital letter first for the method name. Which is great but if I wanted
+  to create a struct to encapsulate data and then return that struct in 
+  the create method, the capital first method that returns something feels a
+  bit weird. Redis' does it this way instead...
+
+--- code start ---
+
+typedef struct listNode {
+    struct listNode *prev;
+    struct listNode *next;
+    void *value;
+} listNode;
+
+typedef struct list {
+    listNode *head;
+    listNode *tail;
+    unsigned long len;
+} list;
+
+list * listCreate(void);
+list * listAddNodeHead(list *aList, void *value);
+
+--- code end ---
+
+> Notice the naming convention. The structs, which are the data structures
+  "list" and "listNode" start with lowercase and are camelCase.
+  The methods listCreate() and listAddNodeHead() both start with lowercase,
+  "list" being the "classname" and then followed by the method/action name.
+  This seems to me better or easier on the eyes/head then the previous style
+  from TDD Embedded.
+  Another naming convention is zmq's all lowercase separated by underscores:
+  zmq_send(), zmq_recv(), zmq_ctx_new(), zmq_ctx_destroy(), which is also
+  nice, but now I'll settle for Redis style naming: listCreate(), listFirst(),
+  listAddNodeHead(), listAddNodeTail(), listPrevNode(), listNextNode(),
+  listNodeValue(), listSetDupMethod(), listSetFreeMethod()....
+
+  struct list ... struct listNode ... struct listIter
+
+Mon Oct 30 18:20:53 EDT 2017
+END
