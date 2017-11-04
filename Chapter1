@@ -839,7 +839,7 @@ How to change names to your project's name.
 - change all instances of LedDriver in LedDriverTest.c to ProjectName
 - change all instances of LedDriver in LedDriverTestRunner.c to ProjectName
 - cd ..
-- change all instances of LedDriver in run to ProjectName 
+- change all instances of LedDriver in run to ProjectName
 
 Sun Oct 29 09:46:08 EDT 2017
 END
@@ -849,8 +849,7 @@ START
 > I think that I hacked on the code already for 30 minutes before starting
   this post...
 > Working on making tests for a "list" implementation. Of course I am using
-  Salvatore Sanfilippo's (antirez), the creator of "redis", implementation
-  of a doubly linked list in adlist.c and adlist.h.
+  the implementation of a doubly linked list in adlist.c and adlist.h.
   Since am reading "Test Driven Development for Embedded C", I am taking the
   TDD approach which is just to make the test first to fail, then create
   stubs to make it pass right away. Only making real implementation when
@@ -916,4 +915,59 @@ list * listAddNodeHead(list *aList, void *value);
   struct list ... struct listNode ... struct listIter
 
 Mon Oct 30 18:20:53 EDT 2017
+END
+
+Fri Nov  3 04:13:31 EDT 2017
+START
+
+> Have not been able to put an entry in a few days but have worked on the
+  tests....
+TEST_GROUP_RUNNER(List) {
+    RUN_TEST_CASE(List, ListEmptyAfterCreate);
+    RUN_TEST_CASE(List, ListAddNodeHead);
+    RUN_TEST_CASE(List, ListAddReturnsList);
+    RUN_TEST_CASE(List, ListAddTwoNodesToHead);
+    RUN_TEST_CASE(List, ListAddOnePrevNodeNull);
+    RUN_TEST_CASE(List, ListAddOneNextNodeNull);
+    RUN_TEST_CASE(List, ListAddOneTailAndHeadEqual);
+    RUN_TEST_CASE(List, ListAddThreeHasPrev);
+}
+
+> Also got into some ruby study, having the example of a todo list app.
+  Easily implemented in Ruby. This is from the book: "Build Awesome Command-
+  Line Applications in Ruby".
+Fri Nov  3 04:45:31 EDT 2017
+END
+
+Sat Nov  4 11:24:29 EDT 2017
+START
+
+> Reading bgipc "Beej's Guide to IPC" after having done some work on
+  arrays from the same author's book on C. Now in fork_and_pipe.c.
+
+--- code start ---
+
+int main(void) {
+    int pfds[2];
+    char buf[30];
+    pipe(pfds);
+
+    // fork() returns 0 on the child process
+    if (!fork()) {
+        printf(" CHILD: writing to the pipe\n");
+        write(pfds[1], "test", 5);
+        printf(" CHILD: exiting\n");
+        exit(0);
+    } else {
+        printf("PARENT: trying to read from pipe\n");
+        read(pfds[0], buf, 5);
+        printf("PARENT: read '%s'\n", buf);
+        wait(NULL);
+    }
+    return 0;
+}
+
+--- code end ---
+
+Sat Nov  4 11:39:30 EDT 2017
 END
