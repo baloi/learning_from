@@ -971,3 +971,35 @@ int main(void) {
 
 Sat Nov  4 11:39:30 EDT 2017
 END
+
+Sun Nov  5 07:05:42 EST 2017
+START
+
+> Working on Unix ipc... Reading the free ebook by Beej
+
+--- code start ---
+
+#include <unistd.h>
+
+int main(void) {
+    int pfds[2];
+    pipe(pfds);
+    if (!fork()) { // remember that fork returns 0 for the child
+        close(1);  // close normal stdout
+        dup(pfds[1]); // make stdout same as pfds
+        close(pfds[0]); // we don't need this
+        execlp("ls", "ls", NULL);
+    } else {
+        close(0);       // close normal stdin
+        dup(pfds[0]);   // make stdin same as pfds[0]
+        close(pfds[1]); // we don't need this
+        execlp("wc", "wc", "-l", NULL);
+    }
+    return 0;
+}
+
+
+--- code end ---
+
+Sun Nov  5 07:25:42 EST 2017
+END

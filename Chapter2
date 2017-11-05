@@ -1,0 +1,69 @@
+A PLAN...
+
+Sun Nov  5 10:54:42 EST 2017
+START
+
+> This is how it is going:
+  I have found out that I am more productive writing entries in a log like
+  this. What is different with this logging is that I try to log as much as
+  possible. Recording steps to do something which I might forget like how
+  to find info, or what to download, how to install and then how to just
+  incrementally "hack" at a code. Recording how I am learning and doing
+  makes this endeavor more worthwhile.
+  I have read and tinkered with sources from OSS and a couple of books 
+  which is great.
+  Also putting a timestamp (START and END) makes me go through the material
+  much more quickly, gets me very focused and I've seen a lot of results.
+  It forces me to learn from something as fast as I can and leaving less
+  time to be to "idealistic". There is never a perfect start it seems, it
+  always has been a lot of stumbles.
+  It feels better to not be afraid to make mistakes...
+
+Sun Nov  5 11:00:45 EST 2017
+END
+
+Sun Nov  5 11:01:04 EST 2017
+START
+
+> What to do next?
+  IPC
+  sockets?
+  find how messaging is used in real world programs.
+
+> going into zeromq code
+  
+$ cd src
+
+> code is in C++. Hmm...
+  It seems he wanted C too: http://250bpm.com/blog:4
+  Now nanomsg is in C. Created by the same author of above.
+  http://nanomsg.org/
+
+> Getting stuck at zmq...
+
+> http://hintjens.com/blog:112. Uhh
+Sun Nov  5 11:17:29 EST 2017
+
+> Downloaded nanomsg-1.0.0
+$ unzip nanomsg-1.0.0
+$ ./configure
+$ make
+$ cd src
+
+> The code is formatted like this xxx_xxx_xxxx().
+  I looked at the list implementation and then the core dir. It looks good
+  but I cannot get my head around it. Definitely something to read later
+  on?
+
+Sun Nov  5 11:32:17 EST 2017
+
+> back to redis
+$ cd src
+$ grep -R "struct client"
+
+> blowing my mind...
+  Time to get my dog for a walk.
+> I have my mind set on the redis implementation.
+
+Sun Nov  5 11:36:47 EST 2017
+END
