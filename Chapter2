@@ -67,3 +67,11 @@ $ grep -R "struct client"
 
 Sun Nov  5 11:36:47 EST 2017
 END
+
+Tue Nov  7 20:25:23 EST 2017
+START
+
+> http://buildyourownlisp.com/chapter4_interactive_prompt
+
+Tue Nov  7 20:44:29 EST 2017
+END
