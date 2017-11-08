@@ -73,5 +73,38 @@ START
 
 > http://buildyourownlisp.com/chapter4_interactive_prompt
 
+--- code start ---
+
+/* interactive.c
+ * compile: cc -std=c99 -Wall interactive.c -ledit -o interactive
+ */
+#include <stdio.h>
+#include <stdlib.h>
+#include <editline/readline.h>
+#include <histedit.h>
+//#include <editline/history.h>
+// declare a buffer for input
+//static char input[2048];
+
+int main(int argc, char **argv) {
+    // Print version and exit information
+    puts("Lispy Version 0.0.0.0.1");
+    puts("Press Ctrl+c to Exit\n");
+
+    while (1) {
+        /*
+        fputs("lispy> ", stdout);
+        fgets(input, 2048, stdin);
+        */
+        char* input = readline("lispy> ");
+        add_history(input);
+        printf("No you're a %s\n", input);
+        free(input);
+    }
+    return 0;
+}
+
+--- code end ---
+
 Tue Nov  7 20:44:29 EST 2017
 END
