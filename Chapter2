@@ -108,3 +108,40 @@ int main(int argc, char **argv) {
 
 Tue Nov  7 20:44:29 EST 2017
 END
+
+Sun Nov 12 12:25:07 EST 2017
+START
+> did more for listTest.c
+  Now tested for listRewind and listNext(listIter *i)
+
+--- code start ---
+/* from listTest.c */
+TEST(List, ListNextAfterLast) {
+    list *aList = listCreate();
+    listNode *aNode;
+    listIter li; 
+    listAddNodeHead(aList, "one"); 
+    listAddNodeHead(aList, "two"); 
+    listRewind(aList, &li);
+    aNode = listNext(&li);
+    aNode = listNext(&li);
+    TEST_ASSERT_EQUAL("one", aNode->value);
+    aNode = listNext(&li);
+    TEST_ASSERT_EQUAL(NULL, aNode);
+}
+
+/* from list.c */
+void listRewind(list *aList, listIter *li) {
+    li->next = aList->head;
+}
+
+listNode * listNext(listIter *iter) {
+    listNode *current = iter->next;
+    if (current != NULL) { iter->next = current->next; }
+    return current;
+}
+
+--- code end ---
+
+Sun Nov 12 12:40:12 EST 2017
+END
