@@ -145,3 +145,22 @@ listNode * listNext(listIter *iter) {
 
 Sun Nov 12 12:40:12 EST 2017
 END
+
+
+Sun Nov 12 15:41:06 EST 2017
+START
+
+> First choose what to do...
+
+  I'll test some Stanford samples...
+
+$ cd c_cyg/algo/stanford
+
+Sun Nov 12 16:01:12 EST 2017
+ 
+> Just got the test running..
+
+> Test runs but "illegal instruction"
+
+Sun Nov 12 16:12:59 EST 2017
+END
