@@ -109,6 +109,26 @@ int main(int argc, char **argv) {
 Tue Nov  7 20:44:29 EST 2017
 END
 
+Wed Nov  8 07:34:41 EST 2017
+START
+
+> In listTesRunner.c
+    RUN_TEST_CASE(List, ListRewindGetsFirstNode);
+
+> In list.c:
+
+listNode * listNext(listIter *iter) {
+
+}
+
+void listRewind(list *aList, listIter *li) {
+    
+}
+
+> In listTest.c
+
+TEST(List, ListRewindGetsFirstNode) {
+=======
 Sun Nov 12 12:25:07 EST 2017
 START
 > did more for listTest.c
@@ -117,6 +137,7 @@ START
 --- code start ---
 /* from listTest.c */
 TEST(List, ListNextAfterLast) {
+>>>>>>> 23837afc5db5179dee6527d3a83e9cb2a98997a6
     list *aList = listCreate();
     listNode *aNode;
     listIter li; 
@@ -124,6 +145,22 @@ TEST(List, ListNextAfterLast) {
     listAddNodeHead(aList, "two"); 
     listRewind(aList, &li);
     aNode = listNext(&li);
+<<<<<<< HEAD
+    TEST_ASSERT_EQUAL("one", aNode->value);
+}
+
+Wed Nov  8 07:50:46 EST 2017
+END
+
+Wed Nov  8 21:48:17 EST 2017
+START
+
+> Working on listTest.c...
+
+Wed Nov  8 22:18:17 EST 2017
+END
+
+=======
     aNode = listNext(&li);
     TEST_ASSERT_EQUAL("one", aNode->value);
     aNode = listNext(&li);
@@ -163,4 +200,197 @@ Sun Nov 12 16:01:12 EST 2017
 > Test runs but "illegal instruction"
 
 Sun Nov 12 16:12:59 EST 2017
+END
+
+Wed Nov 15 20:22:38 EST 2017
+START
+
+> This is what I coded so far in Java for processing an html page and
+  extracting data. I downloaded and used the Community edition of Intellij
+  Idea. Used presentation, full-screen and distraction free modes. What a
+  breeze and pleasure to code in. Now for the code:
+
+--- code start ---
+// com/baloi/Main.java
+
+package com.baloi.mds;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import static java.lang.System.out;
+import static com.baloi.mds.MDSUtil.extractDate;
+import static com.baloi.mds.MDSUtil.extractName;
+
+
+class MDSList {
+    private ArrayList<MDSBook> mdsBooks;
+    private ArrayList<String> dataList;
+
+    MDSList(ArrayList<String> dataList) {
+        this.dataList = dataList;
+        createBooksFromData(dataList);
+    }
+
+    private void createBooksFromData(ArrayList<String> dataList) {
+        Iterator iterator = dataList.iterator();
+        String data;
+        String date;
+        Patient patient;
+        while (iterator.hasNext()) {
+            data = (String) iterator.next();
+            if (MDSUtil.lineHasDate(data) && MDSUtil.lineHasName(data)) {
+                //out.println("ok");
+                date = extractDate(data);
+                patient = extractPatient(data);
+                MDSBook book = new MDSBook(date, patient);
+            }
+        }
+    }
+
+    private Patient extractPatient(String data) {
+        String lastName = extractLastName(data);
+        String firstName = extractFirstName(data);
+        return new Patient(lastName, firstName);
+    }
+
+    private String extractLastName(String data) {
+        //TODO: implement
+        return "";
+    }
+
+    private String extractFirstName(String data) {
+        //TODO: implement
+        return "";
+    }
+
+    void print() {
+        Iterator iterator = dataList.iterator();
+        String aLine;
+        while (iterator.hasNext()) {
+            aLine = (String) iterator.next();
+            if (MDSUtil.lineHasDate(aLine)) {
+                //out.println(aLine);
+                out.print(extractDate(aLine) + " - ");
+                out.println(extractName(aLine));
+            }
+        }
+    }
+}
+
+class MDSServer {
+    void run() {
+        out.println("Running server on port 8888");
+    }
+}
+
+class MDSUtil {
+    static String extractDate(String data) {
+        int startIndex;
+        String date;
+
+        if (data.contains("2017")) {
+            startIndex = data.indexOf("2017");
+            date = data.substring(startIndex-6, startIndex+4);
+
+            return date;
+        }
+        else return " ";
+    }
+
+    static String extractName(String data) {
+        int startIndex;
+        String name;
+
+        if (data.contains(MDSVals.NAME_MARKER)) {
+            startIndex = data.indexOf(MDSVals.NAME_MARKER);
+            name = data.substring(startIndex+15, startIndex+50);
+            return name;
+        }
+        else return " ";
+    }
+    static boolean lineHasDate(String line) { return line.contains("/2017"); }
+    static boolean lineHasName(String line) { return line.contains(MDSVals.NAME_MARKER); }
+}
+class MDSVals {
+    static final String NAME_MARKER = "ESOLtabtype=C";
+}
+class Patient {
+    private String firstName;
+    private String lastName;
+
+    Patient(String lastName, String firstName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+}
+
+class MDSBook {
+    private String date;
+    private Patient patient;
+
+    MDSBook(String date, Patient patient) {
+        this.date = date;
+        this.patient = patient;
+    }
+}
+
+class MDSFileReader {
+
+    static ArrayList<String> readDataFromFile(String filename) throws IOException {
+        FileReader fileReader = new FileReader(filename);
+        ArrayList<String> lines = new ArrayList<>();
+        String line;
+
+        BufferedReader reader = new BufferedReader(fileReader);
+
+        while ((line = reader.readLine()) != null) {
+            if (MDSUtil.lineHasDate(line)) {
+                lines.add(line);
+            }
+        }
+
+        reader.close();
+
+        return lines;
+    }
+
+
+}
+
+public class Main {
+    public static void main(String[] args) {
+        String filename = "~/IdeaProjects/mds/src/Clinical - MDS Portal.html";
+        ArrayList<String> dataList = null;
+
+        try {
+            dataList = MDSFileReader.readDataFromFile(filename);
+        } catch (IOException ioe) {
+            out.println("Error reading " + filename);
+            ioe.printStackTrace();
+        }
+
+        out.println("--- Iterating through the list ---");
+
+        MDSList mdsList = new MDSList(dataList);
+        mdsList.print();
+        MDSServer mdsServer = new MDSServer();
+        mdsServer.run();
+        out.println("--- main done. ---");
+    }
+}
+--- code end ---
+
+> About 160 lines or so. Intellisense and other things like doing Alt-Enter for imports or other
+  suggestions, Alt-u u for build and run. And just the distraction free UI. Well, I got sold when the
+  editor bindings were in Vim! Sold!
+
+> I had to reset git:
+ 
+$ git reset --hard 23837afc5db5179dee6527d3a83e9cb2a98997a6
+
+Wed Nov 15 20:41:51 EST 2017
 END
