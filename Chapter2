@@ -128,39 +128,6 @@ void listRewind(list *aList, listIter *li) {
 > In listTest.c
 
 TEST(List, ListRewindGetsFirstNode) {
-=======
-Sun Nov 12 12:25:07 EST 2017
-START
-> did more for listTest.c
-  Now tested for listRewind and listNext(listIter *i)
-
---- code start ---
-/* from listTest.c */
-TEST(List, ListNextAfterLast) {
->>>>>>> 23837afc5db5179dee6527d3a83e9cb2a98997a6
-    list *aList = listCreate();
-    listNode *aNode;
-    listIter li; 
-    listAddNodeHead(aList, "one"); 
-    listAddNodeHead(aList, "two"); 
-    listRewind(aList, &li);
-    aNode = listNext(&li);
-<<<<<<< HEAD
-    TEST_ASSERT_EQUAL("one", aNode->value);
-}
-
-Wed Nov  8 07:50:46 EST 2017
-END
-
-Wed Nov  8 21:48:17 EST 2017
-START
-
-> Working on listTest.c...
-
-Wed Nov  8 22:18:17 EST 2017
-END
-
-=======
     aNode = listNext(&li);
     TEST_ASSERT_EQUAL("one", aNode->value);
     aNode = listNext(&li);
@@ -179,6 +146,36 @@ listNode * listNext(listIter *iter) {
 }
 
 --- code end ---
+
+Wed Nov  8 07:50:46 EST 2017
+END
+
+Wed Nov  8 21:48:17 EST 2017
+START
+
+> Working on listTest.c...
+
+Wed Nov  8 22:18:17 EST 2017
+END
+
+Sun Nov 12 12:25:07 EST 2017
+START
+
+> did more for listTest.c
+  Now tested for listRewind and listNext(listIter *i)
+
+--- code start ---
+/* from listTest.c */
+TEST(List, ListNextAfterLast) {
+    list *aList = listCreate();
+    listNode *aNode;
+    listIter li; 
+    listAddNodeHead(aList, "one"); 
+    listAddNodeHead(aList, "two"); 
+    listRewind(aList, &li);
+    aNode = listNext(&li);
+    TEST_ASSERT_EQUAL("one", aNode->value);
+}
 
 Sun Nov 12 12:40:12 EST 2017
 END
