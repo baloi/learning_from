@@ -391,3 +391,50 @@ $ git reset --hard 23837afc5db5179dee6527d3a83e9cb2a98997a6
 
 Wed Nov 15 20:41:51 EST 2017
 END
+
+Thu Nov 16 23:29:55 EST 2017
+START
+
+> Now I have put the file name to open in a config file, making main() this:
+
+--- code start ---
+
+public class Main {
+    public static void main(String[] args) {
+        Properties properties = new Properties();
+        InputStream input = null;
+
+        String filename;
+        ArrayList<String> dataList = null;
+
+        try {
+            input = new FileInputStream("/home/baloi/IdeaProjects/mds/src/config.properties");
+            properties.load(input);
+            out.println("filename = " + properties.getProperty("filename"));
+            filename = properties.getProperty("filename");
+            dataList = MDSFileReader.readDataFromFile(filename);
+        } catch (IOException ioe) {
+            out.println("Error reading file");
+            ioe.printStackTrace();
+        }
+
+        out.println("--- Iterating through the list ---");
+
+        MDSList mdsList = new MDSList(dataList);
+        mdsList.print();
+        MDSServer mdsServer = new MDSServer();
+        mdsServer.run();
+        out.println("--- main done. ---");
+    }
+}
+--- code end ---
+
+> And now have taken care of the extra character '>' on some of the dates:
+
+--- code start ---
+            if (date.startsWith(">")) {
+                date = date.substring(1);
+            }
+--- code end ---
+
+END
