@@ -439,3 +439,23 @@ public class Main {
 
 Thu Nov 16 23:50:55 EST 2017
 END
+
+Sun Nov 19 22:47:45 EST 2017
+START
+
+> I have been programming in Go since yesterday. Downloaded GoLand EAP. It
+  is basically IntelliJ with Go support. Very nice. Got the Vim plugin to
+  run so the editor uses Vim bindings. I have got to say: editing code
+  using an IDE like GoLand makes me much more productive at the start.
+  Things I like:
+  - Fullscreen in presentation and distraction free modes
+  - Vim bindings
+  - Alt-u u to run
+  - refactoring easy (it is much easier to import packages and makes you
+    less afraid to create and organize your code in coherent packages
+  - looks very nice.
+
+  The only thing is it not free.
+
+Sun Nov 19 23:07:45 EST 2017
+END
