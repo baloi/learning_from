@@ -859,6 +859,8 @@ START
   The naming convention was a bit bothersome though in the TDD book. It is
   like this:
 
+> Note: adlist.c and adlist.h are in c_me/algo...
+
 --- code start ---
 /* LedDriver.c */
 static uint16_t *ledsAddress;
