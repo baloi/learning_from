@@ -1,4 +1,4 @@
-/*   Example: learn_urlge -p 8080 -x my-proxy.my.site http://www.from.here 
+/*   Example: learn_urlget -p 8080 -x my-proxy.my.site http://www.from.here 
  */
 #include <stdio.h>
 #include <stdlib.h>
